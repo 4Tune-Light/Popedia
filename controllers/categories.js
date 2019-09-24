@@ -55,7 +55,8 @@ exports.getCategoriesById = (req, res, next) => {
 
 exports.createCategories = (req, res, next) => {
 	const doc = new Model({
-		name: req.body.name
+		name: req.body.name,
+		updated_at: Date.now
 	})
 
 	doc.save()
@@ -102,10 +103,6 @@ exports.updateCategories = (req, res, next) => {
 			message: err.message
 		})
 	})
-}
-
-exports.addOrReduce = (req, res, next) => {
-
 }
 
 exports.deleteCategories = (req, res, next) => {

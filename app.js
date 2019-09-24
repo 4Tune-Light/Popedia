@@ -20,6 +20,14 @@ app.use(cors())
 
 app.use('/api', Routes)
 
+app.use(function(req, res, next) {
+  res.status(404).json({
+  	status: 404,
+  	error: true,
+  	message: '404 Page Not Found'
+  })
+});
+
 mongoose.connect(process.env.DB_CONNECTION, 
 	{ useNewUrlParser: true, useUnifiedTopology: true }, 
 	() => {

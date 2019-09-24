@@ -55,7 +55,11 @@ exports.getProductsById = (req, res, next) => {
 
 exports.createProducts = (req, res, next) => {
 	const doc = new Model({
-		name: req.body.name
+		name: req.body.name,
+		image: req.body.image,
+		category_id: req.body.category_id,
+		quantity: req.body.quantity,
+		description: req.body.description,
 	})
 
 	doc.save()
@@ -78,7 +82,14 @@ exports.createProducts = (req, res, next) => {
 exports.updateProducts = (req, res, next) => {
 	Model.updateOne(
 		{_id: req.params.id},
-		{name: req.body.name}
+		{
+			name: req.body.name,
+			image: req.body.image,
+			category_id: req.body.category_id,
+			quantity: req.body.quantity,
+			description: req.body.description,
+			updated_at: Date.now
+		}
 	)
 	.then(() => {
 		if (response.nModified > 0) {
@@ -105,7 +116,40 @@ exports.updateProducts = (req, res, next) => {
 }
 
 exports.addOrReduce = (req, res, next) => {
+	let counter = 0;
 
+	if (req.params.action === 'add') { 
+		counter = 1
+	} else { 
+		counter = -1
+	}
+
+	Model.updateOne(
+		{_id: req.params.id},
+		{quantity: quantity + counter}
+	)
+	.then(() => {
+		if (response.nModified > 0) {
+			res.json({
+				status: 200,
+				error: false,
+				message: 'Successfully updated Products with id: ' + req.params.id
+			})
+		} else {
+			res.status(404).json({
+				status: 404,
+				error: true,
+				message: 'Failed to update Products, Products not found' 
+			})
+		}
+	})
+	.catch(err => {
+		res.status(400).json({
+			status: 400,
+			error: true,
+			message: err.message
+		})
+	})
 }
 
 exports.deleteProducts = (req, res, next) => {

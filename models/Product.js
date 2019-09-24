@@ -29,16 +29,6 @@ const ProductSchema = new Schema({
 		required: true,
 	},
 
-	shop: {
-		type: Schema.Types.ObjectId,
-		ref: 'Category',
-	},
-
-	history: {
-		type: Schema.Types.ObjectId,
-		ref: 'Category',
-	},
-
 	created_at: {
 		type: Date,
 		default: Date.now,
