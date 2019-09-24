@@ -56,7 +56,6 @@ exports.getCategoriesById = (req, res, next) => {
 exports.createCategories = (req, res, next) => {
 	const doc = new Model({
 		name: req.body.name,
-		updated_at: Date.now
 	})
 
 	doc.save()

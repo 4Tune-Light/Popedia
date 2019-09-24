@@ -80,7 +80,7 @@ exports.createProducts = (req, res, next) => {
 }
 
 exports.updateProducts = (req, res, next) => {
-	Model.update(
+	Model.updateOne(
 		{_id: req.params.id},
 		{
 			name: req.body.name,
