@@ -13,7 +13,7 @@ const ProductSchema = new Schema({
 		required: true,
 	},
 
-	category: {
+	category_id: {
 		type: Schema.Types.ObjectId,
 		ref: 'Category',
 		required: true,
@@ -27,17 +27,10 @@ const ProductSchema = new Schema({
 	description: {
 		type: String,
 		required: true,
-	},
-
-	created_at: {
-		type: Date,
-		default: Date.now,
-	},
-
-	updated_at: {
-		type: Date,
-		default: Date.now,
-	},
+	}
+	
+},{
+	timestamps: true
 })
 
 const ProductModel = mongoose.model('Product', ProductSchema)

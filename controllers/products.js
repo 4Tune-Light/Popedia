@@ -80,7 +80,7 @@ exports.createProducts = (req, res, next) => {
 }
 
 exports.updateProducts = (req, res, next) => {
-	Model.updateOne(
+	Model.update(
 		{_id: req.params.id},
 		{
 			name: req.body.name,
@@ -88,10 +88,9 @@ exports.updateProducts = (req, res, next) => {
 			category_id: req.body.category_id,
 			quantity: req.body.quantity,
 			description: req.body.description,
-			updated_at: Date.now
 		}
 	)
-	.then(() => {
+	.then(response => {
 		if (response.nModified > 0) {
 			res.json({
 				status: 200,
@@ -110,30 +109,33 @@ exports.updateProducts = (req, res, next) => {
 		res.status(400).json({
 			status: 400,
 			error: true,
-			message: err.message
+			message: err.message,
+			error123: 'errornya disini mas'
 		})
 	})
 }
 
 exports.addOrReduce = (req, res, next) => {
-	let counter = 0;
-
-	if (req.params.action === 'add') { 
+	let counter = 0
+	let message = ''
+	if (req.body.action === 'add') { 
 		counter = 1
-	} else { 
+		message = 'Added'
+	} else if (req.body.action === 'reduce') { 
 		counter = -1
+		message = 'Reduced'
 	}
 
 	Model.updateOne(
 		{_id: req.params.id},
-		{quantity: quantity + counter}
+		{$inc: {quantity: counter}}
 	)
-	.then(() => {
+	.then(response => {
 		if (response.nModified > 0) {
 			res.json({
 				status: 200,
 				error: false,
-				message: 'Successfully updated Products with id: ' + req.params.id
+				message: `Successfully ${message} Products with id: ` + req.params.id
 			})
 		} else {
 			res.status(404).json({
