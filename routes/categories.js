@@ -11,8 +11,6 @@ Router.post('/', Control.createCategories)
 
 Router.put('/:id', Control.updateCategories)
 
-Router.patch('/:id', Control.addOrReduce)
-
 Router.delete('/:id', Control.deleteCategories)
 
 module.exports = Router
