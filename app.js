@@ -6,7 +6,9 @@ const app = express()
 const logger = require('morgan')
 const cors = require('cors')
 const mongoose = require('mongoose')
+const redis = require('redis')
 
+const client = redis.createClient(6379)
 
 const Routes = require('./routes')
 
@@ -38,3 +40,5 @@ mongoose.connect(process.env.DB_CONNECTION,
 app.listen(process.env.PORT, () => {
 	console.log('Server is UP')
 })
+
+module.exports.client = client

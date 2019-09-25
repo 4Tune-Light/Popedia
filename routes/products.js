@@ -1,10 +1,12 @@
 const express = require('express')
 const Router = express.Router()
 
+const cache = require('../middlewares/cache')
+
 const Control = require('../controllers/products')
 
 
-Router.get('/', Control.getProducts)
+Router.get('/', cache, Control.getProducts)
 
 Router.get('/:id', Control.getProductsById)
 

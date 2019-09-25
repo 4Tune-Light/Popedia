@@ -1,9 +1,13 @@
 const Model = require('../models/Product')
+const redis = require('../app')
 
 exports.getProducts = (req, res, next) => {
 	Model.find()
 	.then(data => {
 		if (data.length > 0) {
+
+			redis.client.setex('products', 86400, data)
+
 			res.json({
 				status: 200,
 				error: false,
