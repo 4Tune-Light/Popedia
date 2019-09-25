@@ -27,6 +27,12 @@ const ProductSchema = new Schema({
 	description: {
 		type: String,
 		required: true,
+	},
+
+	user_id: {
+		type: Schema.Types.ObjectId,
+		ref: 'User',
+		required: true,
 	}
 	
 },{

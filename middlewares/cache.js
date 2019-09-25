@@ -4,13 +4,15 @@ const cache = (req, res, next) => {
 	redis.client.get('products', (err, data) => {
 		if (err) next(err)
 
-		if (data) {
+		if (data !== null) {
+			console.log('bisa mah')
 			res.json({
 				status: 200,
 				error: false,
-				data
+				data: JSON.parse(data)
 			})
 		} else {
+			console.log('gagal')
 			next()
 		}
 	})

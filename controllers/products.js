@@ -1,12 +1,14 @@
 const Model = require('../models/Product')
-const redis = require('../app')
+const app = require('../app')
+const multer = require('multer')
+const fs = require('fs')
 
 exports.getProducts = (req, res, next) => {
 	Model.find()
 	.then(data => {
 		if (data.length > 0) {
 
-			redis.client.setex('products', 86400, data)
+			app.client.setex('products', 86400, JSON.stringify(data))
 
 			res.json({
 				status: 200,
@@ -60,10 +62,11 @@ exports.getProductsById = (req, res, next) => {
 exports.createProducts = (req, res, next) => {
 	const doc = new Model({
 		name: req.body.name,
-		image: req.body.image,
+		image: '192.168.0.111:4869/api/products/images/' + req.file.filename,
 		category_id: req.body.category_id,
 		quantity: req.body.quantity,
 		description: req.body.description,
+		user_id: req.body.user_id,
 	})
 
 	doc.save()
@@ -159,13 +162,23 @@ exports.addOrReduce = (req, res, next) => {
 }
 
 exports.deleteProducts = (req, res, next) => {
-	Model.remove({_id: req.params.id})
+	Model.findOneAndRemove({_id: req.params.id})
 	.then(data => {
-		res.json({
-			status: 200,
-			error: false,
-			message: 'Successfully removed Prodcts with id: ' + req.params.id
-		})
+		if (data) {
+			fs.unlinkSync(app.rootPath + '/uploads/products/' + data.image.substr(39))
+			res.json({
+				status: 200,
+				error: false,
+				message: 'Successfully removed Prodcts with id: ' + req.params.id
+			})
+		} else {
+			res.status(404).json({
+				status: 404,
+				error: true,
+				message: 'Failed to remove Products, cannot find products with id: ' + req.params.id
+			})
+		}
+		
 	})
 	.catch(err => {
 		res.status(400).json({
@@ -174,4 +187,9 @@ exports.deleteProducts = (req, res, next) => {
 			message: err.message
 		})
 	})
+}
+
+exports.refreshRedis = (req, res, next) => {
+	app.client.flushall()
+	res.redirect('/api/products')
 }
