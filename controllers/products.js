@@ -4,11 +4,11 @@ const multer = require('multer')
 const fs = require('fs')
 
 exports.getProducts = (req, res, next) => {
-	Model.find()
+	Model.find().populate('category_id').populate('user_id')
 	.then(data => {
 		if (data.length > 0) {
 
-			app.client.setex('products', 86400, JSON.stringify(data))
+			app.client.set('products', JSON.stringify(data))
 
 			res.json({
 				status: 200,
@@ -33,7 +33,7 @@ exports.getProducts = (req, res, next) => {
 }
 
 exports.getProductsById = (req, res, next) => {
-	Model.findById(req.params.id)
+	Model.findById(req.params.id).populate('category_id').populate('user_id')
 	.then(data => {
 		if (data) {
 			res.json({
@@ -59,10 +59,67 @@ exports.getProductsById = (req, res, next) => {
 	})
 }
 
+exports.getProductsByCategory = (req, res, next) => {
+	Model.find({category_id: req.params.category}).populate('category_id').populate('user_id')
+	.then(data => {
+		if (data) {
+			res.json({
+				status: 200,
+				error: false,
+				data
+			})
+		} else {
+			res.status(404).json({
+				status: 404,
+				error: true,
+				message: 'Products not found'
+			})
+		}
+		
+	})
+	.catch(err => {
+		res.status(400).json({
+			status: 400,
+			error: true,
+			message: err.message
+		})
+	})
+}
+
+exports.getProductsByUser = (req, res, next) => {
+	Model.find({user_id: req.params.user}).populate('category_id').populate('user_id')
+	.then(data => {
+		if (data) {
+			res.json({
+				status: 200,
+				error: false,
+				data
+			})
+		} else {
+			res.status(404).json({
+				status: 404,
+				error: true,
+				message: 'Products not found'
+			})
+		}
+		
+	})
+	.catch(err => {
+		res.status(400).json({
+			status: 400,
+			error: true,
+			message: err.message
+		})
+	})
+}
+
+
+
 exports.createProducts = (req, res, next) => {
 	const doc = new Model({
 		name: req.body.name,
-		image: '192.168.0.111:4869/api/products/images/' + req.file.filename,
+		image: '/api/products/images/' + req.file.filename,
+		price: req.body.price,
 		category_id: req.body.category_id,
 		quantity: req.body.quantity,
 		description: req.body.description,
@@ -71,6 +128,7 @@ exports.createProducts = (req, res, next) => {
 
 	doc.save()
 	.then(data => {
+		app.client.del('products')
 		res.json({
 			status: 200,
 			error: false,
@@ -88,10 +146,11 @@ exports.createProducts = (req, res, next) => {
 
 exports.updateProducts = (req, res, next) => {
 	Model.updateOne(
-		{_id: req.params.id},
+		{_id: req.body.id },
 		{
 			name: req.body.name,
-			image: req.body.image,
+			image: '/api/products/images/' + req.file.filename,
+			price: req.body.price,
 			category_id: req.body.category_id,
 			quantity: req.body.quantity,
 			description: req.body.description,
@@ -99,6 +158,7 @@ exports.updateProducts = (req, res, next) => {
 	)
 	.then(response => {
 		if (response.nModified > 0) {
+			app.client.del('products')
 			res.json({
 				status: 200,
 				error: false,
@@ -117,28 +177,18 @@ exports.updateProducts = (req, res, next) => {
 			status: 400,
 			error: true,
 			message: err.message,
-			error123: 'errornya disini mas'
 		})
 	})
 }
 
 exports.addOrReduce = (req, res, next) => {
-	let counter = 0
-	let message = ''
-	if (req.body.action === 'add') { 
-		counter = 1
-		message = 'Added'
-	} else if (req.body.action === 'reduce') { 
-		counter = -1
-		message = 'Reduced'
-	}
-
-	Model.updateOne(
-		{_id: req.params.id},
-		{$inc: {quantity: counter}}
+	Model.update(
+		{ _id: { $in: req.body.ids }},
+		{ $inc: { quantity: counter } }
 	)
 	.then(response => {
 		if (response.nModified > 0) {
+			app.client.del('products')
 			res.json({
 				status: 200,
 				error: false,
@@ -161,10 +211,14 @@ exports.addOrReduce = (req, res, next) => {
 	})
 }
 
+
+
+
 exports.deleteProducts = (req, res, next) => {
 	Model.findOneAndRemove({_id: req.params.id})
 	.then(data => {
 		if (data) {
+			app.client.del('products')
 			fs.unlinkSync(app.rootPath + '/uploads/products/' + data.image.substr(39))
 			res.json({
 				status: 200,
@@ -190,6 +244,6 @@ exports.deleteProducts = (req, res, next) => {
 }
 
 exports.refreshRedis = (req, res, next) => {
-	app.client.flushall()
+	app.client.del('products')
 	res.redirect('/api/products')
 }

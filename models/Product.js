@@ -6,11 +6,13 @@ const ProductSchema = new Schema({
 	name: {
 		type: String,
 		required: true,
+		trim: true,
 	},
 
 	image: {
 		type: String,
 		required: true,
+		trim: true,
 	},
 
 	category_id: {
@@ -22,11 +24,19 @@ const ProductSchema = new Schema({
 	quantity: {
 		type: Number,
 		required: true,
+		trim: true,
+	},
+
+	price: {
+		type: Number,
+		required: true,
+		trim: true,
 	},
 
 	description: {
 		type: String,
 		required: true,
+		trim: true,
 	},
 
 	user_id: {

@@ -11,24 +11,24 @@ const UserSchema = new Schema({
 	email: {
 		type: String,
 		index: { unique: true },
+		trim: true,
 		required: true,
 	},
 
 	name: {
 		type: String,
 		required: true,
+		trim: true,
 	},
 
 	number: {
 		type: String,
+		trim: true,
 	},
 
 	gender: {
 		type: String,
-	},
-
-	date: {
-		type: Date,
+		trim: true,
 	},
 
 	password: {
@@ -36,16 +36,15 @@ const UserSchema = new Schema({
 		required: true,
 	},
 
-	shop_id: {
-		type: Schema.Types.ObjectId,
-		ref: 'Shop',
-	},
-
-	history_id: {
+	history_id: [{
 		type: Schema.Types.ObjectId,
 		ref: 'History',
-	},
+	}],
 
+	verification: {
+		type: Boolean,
+    default: false
+	}
 },
 
 {
@@ -55,17 +54,17 @@ const UserSchema = new Schema({
 })
 
 UserSchema.pre('save', function(next) {
-  var user = this;
+  var user = this
 
-  if (!user.isModified('password')) return next();
+  if (!user.isModified('password')) return next()
 
   bcrypt.genSalt(saltRounds, function(err, salt) {
     bcrypt.hash(user.password, salt, function(err, hash) {
-      user.password = hash;
-      next();
-    });
-  });
-});
+      user.password = hash
+      next()
+    })
+  })
+})
 
 const UserModel = mongoose.model('User', UserSchema)
 

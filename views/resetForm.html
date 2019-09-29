@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Forgot Password Popedia</title>
+	<meta name="viewport" content="initial-scale=1, minimum-scale=1, maximum-scale=5, user-scalable=no, width=device-width">
+</head>
+<body style="padding: 0; margin: 0">
+	<div style="margin-top: -20px; width: 100%; background-color: #42B549; text-align: center">
+		<h3 style="color: white; padding: 10px">Popedia</h3>
+	</div>
+
+	<div style="display: flex; justify-content: center; align-items: center">
+		<div style="border: 1px solid gray; border-radius: 3px; padding: 30px; padding-top: 10px; box-sizing: border-box;">
+			<h4>Masukkan Password Baru Anda</h4>
+			<form method="post">
+				<div style="margin-bottom: 10px">
+					<label style="margin-bottom: 5px; font-size: 12px">Alamat Email</label><br />
+					<input type="email" name="email" style="width: 100%" required />
+				</div>
+				<div style="margin-bottom: 10px">
+					<label style="margin-bottom: 5px; font-size: 12px">Kata Sandi Baru</label><br />
+					<input type="password" id="password" name="password" style="width: 100%" onkeyup="check()" required />
+				</div>
+				<div style="margin-bottom: 10px">
+					<label style="margin-bottom: 3px; font-size: 12px">Ulangi Kata Sandi</label><br />
+					<input type="password" id="confirm_password" name="confirm_password" style="width: 100%" onkeyup="check()" />
+					<span id='message' style="font-size: 12px"></span>
+				</div>
+				<div>
+					<input type="submit" id="submit" value="Ubah Kata Sandi" style="width: 100%; color: white; background-color: #42B549; border: none; border-radius: 3px; padding: 5px 0" />
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		const check = () => {
+		  if (document.getElementById('password').value ==
+		    document.getElementById('confirm_password').value) {
+		    document.getElementById('message').style.color = 'green';
+		    document.getElementById('message').innerHTML = 'Password match';
+		    document.getElementById('submit').style.backgroundColor = '#42B549';
+		    document.getElementById('submit').disabled = false;
+		  } else {
+		    document.getElementById('message').style.color = 'red';
+		    document.getElementById('message').innerHTML = 'Password does not match';
+		    document.getElementById('submit').style.backgroundColor = 'gray';
+		    document.getElementById('submit').disabled = false;
+		  }
+		}
+	</script>
+</body>
+</html>

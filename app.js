@@ -14,7 +14,7 @@ const Routes = require('./routes')
 
 const Product = require('./models/Product')
 
-
+app.use(express.static(__dirname + '/views'))
 
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
@@ -33,7 +33,8 @@ app.use(function(req, res, next) {
 });
 
 mongoose.connect(process.env.DB_CONNECTION, 
-	{ useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false }, 
+	{ useNewUrlParser: true, useUnifiedTopology: true,
+	  useFindAndModify: false, createIndexes: true }, 
 	() => {
 		console.log('DB Connected!')
 	}
