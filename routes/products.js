@@ -28,13 +28,17 @@ Router.get('/images/:name', (req, res) => {
 	res.sendFile(app.rootPath + '/uploads/products/' + req.params.name)
 })
 
+Router.get('/categories/:id', Control.getProductsByCategory)
+
+Router.get('/user/:id', Control.getProductsByUser)
+
 Router.get('/:id', Control.getProductsById)
 
 Router.post('/', upload.single('image'), Control.createProducts)
 
 Router.put('/:id', upload.single('image'), Control.updateProducts)
 
-Router.patch('/:id', Control.addOrReduce)
+Router.post('/checkout', Control.checkout)
 
 Router.delete('/:id', Control.deleteProducts)
 

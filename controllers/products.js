@@ -4,7 +4,7 @@ const multer = require('multer')
 const fs = require('fs')
 
 exports.getProducts = (req, res, next) => {
-	Model.find().populate('category_id').populate('user_id')
+	Model.find().populate('category_id', 'name').populate('user_id', 'email name')
 	.then(data => {
 		if (data.length > 0) {
 
@@ -33,7 +33,7 @@ exports.getProducts = (req, res, next) => {
 }
 
 exports.getProductsById = (req, res, next) => {
-	Model.findById(req.params.id).populate('category_id').populate('user_id')
+	Model.findById(req.params.id).populate('category_id', 'name').populate('user_id', 'name email')
 	.then(data => {
 		if (data) {
 			res.json({
@@ -60,7 +60,7 @@ exports.getProductsById = (req, res, next) => {
 }
 
 exports.getProductsByCategory = (req, res, next) => {
-	Model.find({category_id: req.params.category}).populate('category_id').populate('user_id')
+	Model.find({category_id: req.params.id}).populate('category_id', 'name').populate('user_id', 'name email')
 	.then(data => {
 		if (data) {
 			res.json({
@@ -87,7 +87,7 @@ exports.getProductsByCategory = (req, res, next) => {
 }
 
 exports.getProductsByUser = (req, res, next) => {
-	Model.find({user_id: req.params.user}).populate('category_id').populate('user_id')
+	Model.find({user_id: req.params.id}).populate('category_id', 'name').populate('user_id', 'name email')
 	.then(data => {
 		if (data) {
 			res.json({
@@ -181,32 +181,32 @@ exports.updateProducts = (req, res, next) => {
 	})
 }
 
-exports.addOrReduce = (req, res, next) => {
-	Model.update(
-		{ _id: { $in: req.body.ids }},
-		{ $inc: { quantity: counter } }
-	)
-	.then(response => {
-		if (response.nModified > 0) {
-			app.client.del('products')
-			res.json({
-				status: 200,
-				error: false,
-				message: `Successfully ${message} Products with id: ` + req.params.id
-			})
-		} else {
-			res.status(404).json({
-				status: 404,
-				error: true,
-				message: 'Failed to update Products, Products not found' 
-			})
-		}
+exports.checkout = (req, res, next) => {
+	const action = req.body.cart.map(item => {
+		const counter = -1 * item.by
+		const data = null
+		Model.update(
+			{ _id: item._id},
+			{ $inc: { quantity: counter } }
+		)
+		.then(res => data = res)
+		return data
+	})
+	
+	Promise.all(action)
+	.then(something => {
+		app.client.del('products')
+		res.json({
+			status: 200,
+			error: false,
+			message: `Successfully to Checkout`,
+		})
 	})
 	.catch(err => {
 		res.status(400).json({
 			status: 400,
 			error: true,
-			message: err.message
+			message: err.message,
 		})
 	})
 }
