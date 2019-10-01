@@ -83,6 +83,8 @@ exports.createHistories = (req, res, next) => {
 	const doc = new Model({
 		user_id: req.body.user_id,
 		product_id: req.body.product_id,
+		quantity: req.body.quantity,
+		total: req.body.total
 	})
 
 	doc.save()
