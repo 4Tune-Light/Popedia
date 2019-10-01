@@ -9,12 +9,23 @@ const cache = require('../middlewares/cache')
 
 const Control = require('../controllers/products')
 
+const generateOTP = () => { 
+    var string = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'; 
+    let OTP = ''; 
+      
+    var len = string.length; 
+    for (let i = 0; i < 11; i++ ) { 
+        OTP += string[Math.floor(Math.random() * len)]; 
+    } 
+    return OTP; 
+} 
+
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
         cb(null, './uploads/products');
      },
     filename: function (req, file, cb) {
-        cb(null , uuidv4() + file.originalname);
+        cb(null , generateOTP()+ '-' + file.originalname);
     }
 });
 
