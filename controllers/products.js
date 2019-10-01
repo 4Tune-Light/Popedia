@@ -4,7 +4,7 @@ const multer = require('multer')
 const fs = require('fs')
 
 exports.getProducts = (req, res, next) => {
-	Model.find().populate('category_id', 'name').populate('user_id', 'email name')
+	Model.find().populate('category_id', 'name').populate('user_id', 'email name').sort({updatedAt: -1})
 	.then(data => {
 		if (data.length > 0) {
 
