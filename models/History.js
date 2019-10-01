@@ -15,6 +15,18 @@ const HistorySchema = new Schema({
 		required: true,
 	}],
 
+	quantity: [{
+		type: Number,
+		required: true,
+		trim: true,
+	}],
+
+	total: {
+		type: Number,
+		required: true,
+		trim: true,
+	},
+
 },{
 	timestamps: true
 })
