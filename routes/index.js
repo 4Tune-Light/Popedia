@@ -4,11 +4,14 @@ const Router = express.Router()
 const usersRoutes = require('./users')
 const productsRoutes = require('./products')
 const categoriesRoutes = require('./categories')
+const historiesRoutes = require('./histories')
 
 Router.use('/users', usersRoutes)
 
 Router.use('/products', productsRoutes)
 
 Router.use('/categories', categoriesRoutes)
+
+Router.use('/histories', historiesRoutes)
 
 module.exports = Router

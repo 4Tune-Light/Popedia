@@ -34,7 +34,7 @@ app.use(function(req, res, next) {
 
 mongoose.connect(process.env.DB_CONNECTION, 
 	{ useNewUrlParser: true, useUnifiedTopology: true,
-	  useFindAndModify: false, createIndexes: true }, 
+	  useFindAndModify: false}, 
 	() => {
 		console.log('DB Connected!')
 	}
