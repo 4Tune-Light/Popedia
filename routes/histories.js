@@ -5,7 +5,9 @@ const Control = require('../controllers/histories')
 
 Router.get('/', Control.getHistories)
 
-Router.get('/:id', Control.getHistoriesById)
+Router.get('/:user_id', Control.getHistoriesByUser)
+
+Router.get('/:user_id/:id', Control.getHistoriesById)
 
 Router.post('/', Control.createHistories)
 
