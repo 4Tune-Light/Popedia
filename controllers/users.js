@@ -72,10 +72,6 @@ exports.registerUsers = (req, res, next) => {
 
 	doc.save()
 	.then(data => {
-		const token = jwt.sign(
-			{name: data.name, email: data.email},
-			process.env.JWT_KEY
-		)
 		const generateOTP = () => { 
 	    const digits = '0123456789'; 
 	    let OTP = ''; 
@@ -154,6 +150,10 @@ exports.verification = async (req, res, next) => {
 				{verification: true}
 			)
 			.then(data => {
+				const token = jwt.sign(
+					{name: data.name, email: data.email},
+					process.env.JWT_KEY
+				)
 				res.json({
 					status: 200,
 					error: false,
