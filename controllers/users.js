@@ -149,11 +149,11 @@ exports.verification = async (req, res, next) => {
 
 		if (req.body.otp === otp) {
 			app.client.del(req.body.email)
-			Model.updateOne(
+			Model.findOneAndUpdate(
 				{email: req.body.email},
 				{verification: true}
 			)
-			.then(response => {
+			.then(data => {
 				res.json({
 					status: 200,
 					error: false,
