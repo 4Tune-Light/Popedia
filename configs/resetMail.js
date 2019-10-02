@@ -24,7 +24,7 @@ const mailer = (name, email, token) => {
 		  di bawah ini:</p>
 
 		<div style="text-align: center;">
-			<a href="http://192.168.0.111:4869/api/users/reset/${token}" style="color: white">
+			<a href="http://ec2-54-204-153-133.compute-1.amazonaws.com:4869/api/users/reset/${token}" style="color: white">
 				<button style="background-color: #42B549; padding: 10px; border: none; border-radius: 3px; color: white">Ganti Kata Sandi di Popedia</button>
 			</a>
 		</div>

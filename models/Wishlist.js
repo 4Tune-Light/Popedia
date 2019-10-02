@@ -9,11 +9,11 @@ const WishlistSchema = new Schema({
 		required: true,
 	},
 
-	product_id: [{
+	product_id: {
 		type: Schema.Types.ObjectId,
 		ref: 'Product',
 		required: true,
-	}],
+	},
 
 },{
 	timestamps: true
