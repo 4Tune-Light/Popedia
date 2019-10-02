@@ -219,7 +219,7 @@ exports.deleteProducts = (req, res, next) => {
 	.then(data => {
 		if (data) {
 			app.client.del('products')
-			fs.unlinkSync(app.rootPath + '/uploads/products/' + data.image.substr(39))
+			fs.unlinkSync(app.rootPath + '/uploads/products/' + data.image.substr(21))
 			res.json({
 				status: 200,
 				error: false,
