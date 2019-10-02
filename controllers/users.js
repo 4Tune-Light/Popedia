@@ -151,9 +151,7 @@ exports.verification = async (req, res, next) => {
 			app.client.del(req.body.email)
 			Model.updateOne(
 				{email: req.body.email},
-				{
-					verification: true,
-				}
+				{verification: true}
 			)
 			.then(response => {
 				res.json({
