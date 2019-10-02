@@ -156,25 +156,17 @@ exports.verification = async (req, res, next) => {
 				}
 			)
 			.then(response => {
-				if (response.nModified > 0) {
-					res.json({
-						status: 200,
-						error: false,
-						user: {
-							_id: data._id,
-							name: data.name,
-							email: data.email
-						},
-						token,
-						message: 'Verification Success'
-					})
-				} else {
-					res.status(404).json({
-						status: 404,
-						error: true,
-						message: 'Verification Failed, Users not found' 
-					})
-				}
+				res.json({
+					status: 200,
+					error: false,
+					user: {
+						_id: data._id,
+						name: data.name,
+						email: data.email
+					},
+					token,
+					message: 'Verification Success'
+				})
 			})
 			.catch(err => {
 				res.status(400).json({
