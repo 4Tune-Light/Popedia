@@ -36,7 +36,8 @@
 	<script type="text/javascript">
 		const check = () => {
 		  if (document.getElementById('password').value ==
-		    document.getElementById('confirm_password').value) {
+		    document.getElementById('confirm_password').value &&
+		    document.getElementById('password'.value != '')) {
 		    document.getElementById('message').style.color = 'green';
 		    document.getElementById('message').innerHTML = 'Password match';
 		    document.getElementById('submit').style.backgroundColor = '#42B549';
