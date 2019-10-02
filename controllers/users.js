@@ -41,6 +41,7 @@ exports.loginUsers = (req, res, next) => {
 					res.status(400).json({
 						status: 400,
 						error: true,
+						validate: data.verification,
 						message: 'Email or Password is wrong'
 					})
 				}
